@@ -12,13 +12,13 @@ export let Context1 = createContext();
 let count = 0;
 function App() {
   useEffect(() => {
+    !localStorage.getItem('watched') &&
     localStorage.setItem("watched", JSON.stringify([]));
   }, []);
 
   let obj = { name: "kim" };
   localStorage.setItem("data", JSON.stringify(obj));
   let pull = JSON.parse(localStorage.getItem("data"));
-
   let [shoes, setShoes] = useState(data);
   let [btn, setBtn] = useState(true);
   let [save, setSave] = useState([10, 11, 12]);
@@ -124,10 +124,6 @@ function Card(props) {
         width="80%"
         onClick={() => {
           props.navigate(`/detail/${props.id}`);
-          let local = JSON.parse(localStorage.getItem("watched"));
-          console.log(local);
-          local.push(props.id);
-          localStorage.setItem("watched", JSON.stringify(local));
         }}
       />
       <h4>{props.shoes.title}</h4>
