@@ -24,7 +24,14 @@ const Detail = (props) => {
   const data = props.shoes.find((a) => {
     return a.id == id;
   });
-  console.log(data);
+  useEffect(()=>{
+    let local = JSON.parse(localStorage.getItem("watched"));
+    local.push(data.id);
+    const set = new Set(local)
+    localStorage.setItem("watched", JSON.stringify([...set]));
+  },[])
+  // console.log(localStorage.getItem("watched"))
+
   useEffect(() => {
     setFade("end");
     return () => {
