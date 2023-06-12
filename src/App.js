@@ -6,14 +6,15 @@ import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Detail from "./routes/Detail.js";
 import axios from "axios";
 import Cart from "./routes/Cart";
+import { useQuery } from "react-query";
 
 export let Context1 = createContext();
 
 let count = 0;
 function App() {
   useEffect(() => {
-    !localStorage.getItem('watched') &&
-    localStorage.setItem("watched", JSON.stringify([]));
+    !localStorage.getItem("watched") &&
+      localStorage.setItem("watched", JSON.stringify([]));
   }, []);
 
   let obj = { name: "kim" };
@@ -23,6 +24,15 @@ function App() {
   let [btn, setBtn] = useState(true);
   let [save, setSave] = useState([10, 11, 12]);
   let navigate = useNavigate();
+
+  let result = useQuery("dd", () => {
+    return axios
+      .get("https://codingapple1.github.io/userdata.json")
+      .then((a) => {
+        console.log("요청됨");
+        return a.data;
+      });
+  });
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
@@ -49,6 +59,11 @@ function App() {
               정보
             </button>
             <Link to="/cart">장바구니</Link>
+          </Nav>
+          <Nav className="ms-auto" style={{ color: "white" }}>
+            {result.isLoading && "로딩중"}
+            {result.error && "에러"}
+            {result.data && result.data.name}
           </Nav>
         </Container>
       </Navbar>
