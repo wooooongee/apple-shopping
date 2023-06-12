@@ -1,16 +1,26 @@
 import "./App.css";
 import { Container, Nav, Navbar, Row, Col } from "react-bootstrap";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, lazy, Suspense } from "react";
 import { data } from "./data.js";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import Detail from "./routes/Detail.js";
+// import Detail from "./routes/Detail.js";
 import axios from "axios";
-import Cart from "./routes/Cart";
+// import Cart from "./routes/Cart";
 import { useQuery } from "react-query";
 
 export let Context1 = createContext();
 
+// const Detail = lazy(() => {
+//   import("./routes/Detail.js");
+// });
+// const Cart = lazy(() => {
+//   import("./routes/Cart.js");
+// });
+
+const Detail = lazy( () => import('./routes/Detail.js') )
+const Cart = lazy( () => import('./routes/Cart.js') )
 let count = 0;
+
 function App() {
   useEffect(() => {
     !localStorage.getItem("watched") &&
