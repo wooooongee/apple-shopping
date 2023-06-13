@@ -10,7 +10,7 @@ const Child = memo(function () {
 });
 
 const Cart = () => {
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
   const dispatch = useDispatch();
   const [count, setCount] = useState(0);
 
@@ -21,7 +21,7 @@ const Cart = () => {
   
   //useMemo
   //useEffect랑 거의 똑같은데 실행 시점이 살짝 다를뿐
-  const result = useMemo(()=>{return logic()},[state])
+  // const result = useMemo(()=>{return logic()},[state])
 
   return (
     <div>

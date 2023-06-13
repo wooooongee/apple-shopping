@@ -1,11 +1,19 @@
 import "./App.css";
 import { Container, Nav, Navbar, Row, Col } from "react-bootstrap";
-import { createContext, useEffect, useState, lazy, Suspense } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+  lazy,
+  Suspense,
+  useTransition,
+  useDeferredValue
+} from "react";
 import { data } from "./data.js";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-// import Detail from "./routes/Detail.js";
+import Detail from "./routes/Detail.js";
 import axios from "axios";
-// import Cart from "./routes/Cart";
+import Cart from "./routes/Cart";
 import { useQuery } from "react-query";
 
 export let Context1 = createContext();
@@ -17,9 +25,11 @@ export let Context1 = createContext();
 //   import("./routes/Cart.js");
 // });
 
-const Detail = lazy( () => import('./routes/Detail.js') )
-const Cart = lazy( () => import('./routes/Cart.js') )
+// const Detail = lazy( () => import('./routes/Detail.js') )
+// const Cart = lazy( () => import('./routes/Cart.js') )
 let count = 0;
+
+const a = new Array(10000).fill(0);
 
 function App() {
   useEffect(() => {
@@ -34,6 +44,9 @@ function App() {
   let [btn, setBtn] = useState(true);
   let [save, setSave] = useState([10, 11, 12]);
   let navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [isPending, startTransition] = useTransition();
+  const state = useDeferredValue(name);
 
   let result = useQuery("dd", () => {
     return axios
@@ -71,6 +84,14 @@ function App() {
             <Link to="/cart">장바구니</Link>
           </Nav>
           <Nav className="ms-auto" style={{ color: "white" }}>
+            <input
+              type="text"
+              onChange={(e) => {
+                startTransition(() => {
+                  setName(e.target.value);
+                });
+              }}
+            />
             {result.isLoading && "로딩중"}
             {result.error && "에러"}
             {result.data && result.data.name}
@@ -134,6 +155,11 @@ function App() {
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="*" element={<div>없는페이지</div>} />
       </Routes>
+      {
+      isPending ? '로딩중' :
+      a.map(() => {
+        return <div>{name}</div>;
+      })}
     </div>
   );
 }
